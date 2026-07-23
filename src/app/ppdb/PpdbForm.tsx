@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/toast";
+import { submitPpdb } from "./actions";
 
 export default function PpdbForm() {
   const [formData, setFormData] = useState({
@@ -45,14 +46,23 @@ export default function PpdbForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log("Form Data Submitted:", formData);
+    const result = await submitPpdb(formData);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (!result.success) {
+      toast.add({
+        title: "Pendaftaran Gagal",
+        description:
+          result.error ||
+          "Terjadi kesalahan saat mengirim formulir. Silakan coba lagi.",
+        type: "error",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     toast.add({
       title: "Pendaftaran Berhasil!",
-      description:
-        "Terima kasih telah mendaftar PPDB. Kami akan segera memproses data Anda.",
+      description: `Nomor pendaftaran Anda: ${result.data?.registration_number}. Simpan nomor ini untuk pengecekan data.`,
       type: "success",
     });
 
