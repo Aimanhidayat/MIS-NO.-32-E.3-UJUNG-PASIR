@@ -9,6 +9,7 @@ const navLinks = [
   { name: "Beranda", href: "/" },
   { name: "Profil", href: "/profil" },
   { name: "Berita", href: "/berita" },
+  { name: "Pengumuman", href: "/pengumuman" },
   { name: "Prestasi", href: "/prestasi" },
   { name: "Galeri", href: "/galeri" },
   { name: "PPDB", href: "/ppdb" },
