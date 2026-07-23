@@ -122,9 +122,17 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top left, rgba(11, 110, 79, 0.06), transparent 28rem),
+      radial-gradient(circle at bottom right, rgba(255, 214, 10, 0.08), transparent 30rem);
+    background-attachment: fixed;
   }
   html {
-    @apply font-sans;
+    @apply scroll-smooth font-sans;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 45%, transparent);
+    color: var(--foreground);
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
