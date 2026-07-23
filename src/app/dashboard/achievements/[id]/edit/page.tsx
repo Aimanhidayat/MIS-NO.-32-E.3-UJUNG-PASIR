@@ -14,11 +14,13 @@ export default async function EditAchievementPage({
   params,
   searchParams,
 }: {
-  params: { slug: string };
+  params: { id: string };
   searchParams: { message: string };
 }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return redirect("/login");
@@ -27,7 +29,7 @@ export default async function EditAchievementPage({
   const { data: achievement, error } = await supabase
     .from("achievements")
     .select("*")
-    .eq("slug", params.slug)
+    .eq("id", params.id)
     .single();
 
   if (error || !achievement) {
@@ -52,7 +54,6 @@ export default async function EditAchievementPage({
         <CardContent>
           <form action={updateAchievement} className="grid gap-4">
             <input type="hidden" name="id" value={achievement.id} />
-            <input type="hidden" name="slug" value={achievement.slug} />
             <input type="hidden" name="existing_image_url" value={achievement.image_url || ""} />
 
             <div className="grid gap-2">
@@ -60,16 +61,34 @@ export default async function EditAchievementPage({
               <Input id="title" name="title" required defaultValue={achievement.title} />
             </div>
             <div className="grid gap-2">
+              <Label htmlFor="student_name">Nama Siswa / Peraih Prestasi</Label>
+              <Input id="student_name" name="student_name" required defaultValue={achievement.student_name} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="level">Tingkat Prestasi</Label>
+              <Input
+                id="level"
+                name="level"
+                placeholder="Contoh: Kecamatan, Kabupaten, Provinsi"
+                required
+                defaultValue={achievement.level}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="year">Tahun</Label>
+              <Input
+                id="year"
+                name="year"
+                type="number"
+                min="1900"
+                max="2100"
+                required
+                defaultValue={achievement.year}
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="description">Deskripsi</Label>
-              <Textarea id="description" name="description" required rows={5} defaultValue={achievement.description} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="organizer">Penyelenggara</Label>
-              <Input id="organizer" name="organizer" required defaultValue={achievement.organizer} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="date">Tanggal</Label>
-              <Input id="date" name="date" type="date" required defaultValue={achievement.date} />
+              <Textarea id="description" name="description" required rows={5} defaultValue={achievement.description || ""} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="image">Gambar (Opsional)</Label>

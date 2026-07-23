@@ -16,16 +16,20 @@ export async function createAchievement(formData: FormData) {
   }
 
   const title = formData.get("title") as string;
+  const student_name = formData.get("student_name") as string;
+  const level = formData.get("level") as string;
+  const yearStr = formData.get("year") as string;
   const description = formData.get("description") as string;
-  const organizer = formData.get("organizer") as string;
-  const date = formData.get("date") as string;
   const imageFile = formData.get("image") as File;
 
-  if (!title || !description || !organizer || !date) {
+  if (!title || !student_name || !level || !yearStr || !description) {
     redirect("/dashboard/achievements/create?message=Semua field harus diisi.");
   }
 
-  const slug = slugify(title, { lower: true, strict: true });
+  const year = parseInt(yearStr, 10);
+  if (isNaN(year)) {
+    redirect("/dashboard/achievements/create?message=Tahun harus berupa angka.");
+  }
 
   let imageUrl: string | null = null;
   if (imageFile && imageFile.size > 0) {
@@ -47,12 +51,11 @@ export async function createAchievement(formData: FormData) {
 
   const { error } = await supabase.from("achievements").insert({
     title,
-    slug,
+    student_name,
+    level,
+    year,
     description,
-    organizer,
-    date,
     image_url: imageUrl,
-    user_id: user.id,
   });
 
   if (error) {
@@ -75,19 +78,23 @@ export async function updateAchievement(formData: FormData) {
   }
 
   const id = formData.get("id") as string;
-  const oldSlug = formData.get("slug") as string;
   const title = formData.get("title") as string;
+  const student_name = formData.get("student_name") as string;
+  const level = formData.get("level") as string;
+  const yearStr = formData.get("year") as string;
   const description = formData.get("description") as string;
-  const organizer = formData.get("organizer") as string;
-  const date = formData.get("date") as string;
   const imageFile = formData.get("image") as File;
   const existingImageUrl = formData.get("existing_image_url") as string;
 
-  if (!id || !title || !description || !organizer || !date) {
-    redirect(`/dashboard/achievements/${oldSlug}/edit?message=Semua field harus diisi.`);
+  if (!id || !title || !student_name || !level || !yearStr || !description) {
+    redirect(`/dashboard/achievements/${id}/edit?message=Semua field harus diisi.`);
   }
 
-  const slug = slugify(title, { lower: true, strict: true });
+  const year = parseInt(yearStr, 10);
+  if (isNaN(year)) {
+    redirect(`/dashboard/achievements/${id}/edit?message=Tahun harus berupa angka.`);
+  }
+
   let imageUrl: string | null = existingImageUrl || null;
 
   if (imageFile && imageFile.size > 0) {
@@ -108,7 +115,7 @@ export async function updateAchievement(formData: FormData) {
 
     if (uploadError) {
       console.error("Error uploading achievement image:", uploadError);
-      redirect(`/dashboard/achievements/${oldSlug}/edit?message=Gagal mengunggah gambar.`);
+      redirect(`/dashboard/achievements/${id}/edit?message=Gagal mengunggah gambar.`);
     }
 
     imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/achievement/${filePath}`;
@@ -128,17 +135,17 @@ export async function updateAchievement(formData: FormData) {
     .from("achievements")
     .update({
       title,
-      slug,
+      student_name,
+      level,
+      year,
       description,
-      organizer,
-      date,
       image_url: imageUrl,
     })
     .eq("id", id);
 
   if (error) {
     console.error("Error updating achievement:", error);
-    redirect(`/dashboard/achievements/${oldSlug}/edit?message=Gagal memperbarui prestasi.`);
+    redirect(`/dashboard/achievements/${id}/edit?message=Gagal memperbarui prestasi.`);
   }
 
   revalidatePath("/dashboard/achievements");

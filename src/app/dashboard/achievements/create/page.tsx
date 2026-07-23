@@ -41,16 +41,20 @@ export default async function CreateAchievementPage({
               <Input id="title" name="title" required />
             </div>
             <div className="grid gap-2">
+              <Label htmlFor="student_name">Nama Siswa / Peraih Prestasi</Label>
+              <Input id="student_name" name="student_name" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="level">Tingkat Prestasi</Label>
+              <Input id="level" name="level" placeholder="Contoh: Kecamatan, Kabupaten, Provinsi" required />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="year">Tahun</Label>
+              <Input id="year" name="year" type="number" min="1900" max="2100" required />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="description">Deskripsi</Label>
               <Textarea id="description" name="description" required rows={5} />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="organizer">Penyelenggara</Label>
-              <Input id="organizer" name="organizer" required />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="date">Tanggal</Label>
-              <Input id="date" name="date" type="date" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="image">Gambar (Opsional)</Label>

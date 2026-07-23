@@ -47,8 +47,9 @@ export default async function DashboardAchievementsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Judul</TableHead>
-                <TableHead>Penyelenggara</TableHead>
-                <TableHead>Tanggal</TableHead>
+                <TableHead>Nama Siswa</TableHead>
+                <TableHead>Tingkat</TableHead>
+                <TableHead>Tahun</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
@@ -56,11 +57,12 @@ export default async function DashboardAchievementsPage() {
               {achievements.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="font-medium">{item.title}</TableCell>
-                  <TableCell>{item.organizer}</TableCell>
-                  <TableCell>{new Date(item.date).toLocaleDateString()}</TableCell>
+                  <TableCell>{item.student_name}</TableCell>
+                  <TableCell>{item.level}</TableCell>
+                  <TableCell>{item.year}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Link href={`/dashboard/achievements/${item.slug}/edit`}>
+                      <Link href={`/dashboard/achievements/${item.id}/edit`}>
                         <Button variant="outline" size="icon">
                           <PencilIcon className="h-4 w-4" />
                         </Button>
