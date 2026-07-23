@@ -51,8 +51,9 @@ export async function submitPpdb(formData: {
     }
 
     return { success: true, data: data?.[0] };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PPDB Action error:", error);
-    return { success: false, error: error.message || "Terjadi kesalahan server" };
+    const message = error instanceof Error ? error.message : "Terjadi kesalahan server";
+    return { success: false, error: message };
   }
 }
